@@ -1,0 +1,60 @@
+<mat-toolbar>
+
+  <span>BINFO-CEP alumni</span>
+  <span class="spacer"></span>
+  <button mat-mini-fab color="primary" [routerLink]="['../']">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+</mat-toolbar>
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Create new alumn</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="First name" formControlName="firstName" maxlength="50">
+            @if (form.controls['firstName'].hasError('required')) {
+            <mat-error>First name is <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Last name" formControlName="lastName" maxlength="50">
+            @if (form.controls['lastName'].hasError('required')) {
+            <mat-error>Last name is <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Description" formControlName="description" maxlength="200"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <app-records [records]="alumn.workplaces||[]" title="Workplaces" createTitle="Add new workplace" icon="corporate_fare" (changed)="onWorkplacesChanged($event)">
+          </app-records>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <app-records [records]="alumn.studies||[]" title="Studies" createTitle="Add new study" icon="school" (changed)="onStudiesChanged($event)"></app-records>
+        </div>
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions class="actions">
+      <span class="spacer"></span>
+      <button mat-raised-button type="button" [routerLink]="['../']">Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -1,0 +1,36 @@
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="full-width">
+        <input matInput placeholder="Name" formControlName="name" maxlength="50">
+        @if (form.controls['name'].hasError('required')) {
+        <mat-error>Name is <strong>required</strong></mat-error>
+        }
+    </mat-form-field>
+    <div class="row">
+        <div class="col">
+            <mat-form-field class="full-width">
+                <mat-label>From date</mat-label>
+                <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="minToDate" [max]="maxFromDate" (dateChange)="onFromDateChanged($event)" maxlength="50">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <mat-form-field class="full-width">
+                <mat-label>To date</mat-label>
+                <input matInput [matDatepicker]="pickerTo" formControlName="toDate" [min]="minToDate" [max]="maxToDate" (dateChange)="onToDateChanged($event)" maxlength="50">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                <mat-datepicker #pickerTo startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col actions">
+            <span class="spacer"></span>
+            <button mat-raised-button type="button" (click)="onCancel()">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Submit</button>
+        </div>
+    </div>
+</form>

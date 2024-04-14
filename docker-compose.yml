@@ -1,0 +1,72 @@
+version: "3"
+services:
+  ganache:
+    build: ./ganache/
+    hostname: ganache
+    ports:
+      - 8545:8545
+    volumes:
+      - ganache:/usr/local/data/
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8545"]
+    #   interval: 5s
+    #   timeout: 10s
+    #   retries: 3
+  truffle:
+    build: ./truffle/
+    # restart: on-failure :3
+    depends_on:
+      - ganache
+      # ganache:
+      #   condition: service_healthy
+    links:
+      - ganache
+    volumes:
+      - truffle:/usr/local/truffle/build/contracts
+  app:
+    build:
+      context: app
+      dockerfile: local.Dockerfile
+      # dockerfile: build.Dockerfile
+    volumes:
+      - app:/usr/local/app/dist/app/browser
+      - truffle:/usr/local/app/src/contracts
+  api:
+    build: ./api/
+    ports:
+      - 81:81
+    environment:
+      - PORT=81
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+    hostname: api
+    depends_on:
+      - redis
+    links:
+      - redis
+  redis:
+    image: redis/redis-stack-server:latest
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_ARGS= --save 10 1 --appendonly yes
+    volumes:
+      - ./redis/data/:/data
+  nginx:
+    build: ./nginx/
+    ports:
+      - 8080:80
+    volumes:
+      - app:/usr/share/nginx/html/app
+    depends_on:
+      - app
+      - api
+      - ganache
+    links:
+      - app
+      - api
+      - ganache
+volumes:
+  app:
+  truffle:
+  ganache:

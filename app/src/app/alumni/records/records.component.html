@@ -1,0 +1,31 @@
+<mat-list>
+    <div mat-header mat-toolbar>
+        <mat-toolbar>
+            <span>{{title}}</span>
+            <span class="spacer"></span>
+            <button mat-mini-fab color="primary" type="button" (click)="onAddRecord()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-toolbar>
+    </div>
+    @for (record of records; track records; let index = $index) {
+    <mat-list-item>
+        <mat-icon matListItemIcon>{{icon}}</mat-icon>
+        <div matListItemTitle>{{record.name}}</div>
+        <span matListItemLine>{{record.fromDate | date}}
+            @if (record.toDate) {
+            -
+            }
+            {{record.toDate | date}}</span>
+        <div matListItemMeta>
+            <button mat-icon-button color="warn" type="button" (click)="onRecordRemove(index)">
+                <mat-icon>close</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" type="button" (click)="onRecordEdit(index)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+    </mat-list-item>
+    }
+    <mat-divider></mat-divider>
+</mat-list>

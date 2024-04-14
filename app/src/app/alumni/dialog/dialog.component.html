@@ -1,0 +1,4 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <app-record (submitted)="onRecordSubmited($event)" (canceled)="onRecordCanceled()" [record]="data.record"></app-record>
+</div>
