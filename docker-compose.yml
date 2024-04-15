@@ -26,11 +26,13 @@ services:
   app:
     build:
       context: app
-      dockerfile: local.Dockerfile
-      # dockerfile: build.Dockerfile
+      # dockerfile: local.Dockerfile
+      dockerfile: build.Dockerfile
     volumes:
       - app:/usr/local/app/dist/app/browser
       - truffle:/usr/local/app/src/contracts
+    depends_on:
+      - truffle
   api:
     build: ./api/
     ports:
