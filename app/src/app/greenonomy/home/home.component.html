@@ -9,64 +9,33 @@
     </button>
 </mat-toolbar>
 <mat-accordion class="example-headers-align">
-    @for (market of markets ; track market.address) {
+    @for (item of myItems ; track item.uri) {
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <mat-icon>account_circle</mat-icon>
-                {{market.address | uppercase}}
+                {{item.uri | uppercase}}
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <div>
-            <mat-card>
-                <mat-card-header>
-                    <!-- <mat-card-title>{{alumn.firstName}} {{alumn.lastName | uppercase}}</mat-card-title> -->
-                </mat-card-header>
-                <mat-card-content>
-                    <!-- <p>{{ alumn.description }}</p>
-
-                    <h3 class="records"> <mat-icon matListItemIcon>corporate_fare</mat-icon><span>Workplaces</span></h3>
-                    <mat-divider></mat-divider>
-                    @for (record of alumn.workplaces ; track record) {
-                    <div class="record">
-                        <span class="record-name">{{record.name}}
-                        </span>
-                        <span class="info">{{record.fromDate | date}}</span>
-                        <span class="info">{{record.toDate | date}}</span>
-                    </div>
-                    }
-                    @empty {
-                    <p>No records!</p>
-                    }
-                    <br>
-                    <h3 class="records"> <mat-icon matListItemIcon>school</mat-icon><span>Studies</span></h3>
-                    <mat-divider></mat-divider>
-                    @for (record of alumn.studies ; track record) {
-                    <div class="record">
-                        <span class="record-name">{{record.name}} </span>
-                        <span class="info">{{record.fromDate | date}}</span>
-                        <span class="info">{{record.toDate | date}}</span>
-                    </div>
-                    }
-                    @empty {
-                    <p>No records!</p>
-                    } -->
-                </mat-card-content>
-
-
-            </mat-card>
-        </div>
-        <mat-action-row>
-            <button mat-raised-button color="warn" (click)="onDelete(market.address||'')">
-                <mat-icon>delete_forever</mat-icon>
-                Delete</button>
-            <button mat-raised-button color="primary" [routerLink]="['./'+market.address+'/edit']">
-                <mat-icon>edit</mat-icon>
-                Edit</button>
-        </mat-action-row>
     </mat-expansion-panel>
     }
     @empty {
-    <p>No markets defined yet!</p>
+    <p>No items</p>
+    }
+</mat-accordion>
+--------------
+<mat-accordion class="example-headers-align">
+    @for (item of marketItems ; track item.uri) {
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>account_circle</mat-icon>
+                {{item.uri | uppercase}}
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    }
+    @empty {
+    <p>No items</p>
     }
 </mat-accordion>

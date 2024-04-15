@@ -17,12 +17,9 @@ import {
   combineLatest,
 } from 'rxjs';
 import { GreenonomyService } from '../greenonomy.service';
-import { IMarket } from '../greenonomy.models';
+import { IItem, IMarket } from '../greenonomy.models';
 import { environment } from '../../../environment/environment';
-// import { Web3Service } from '../web3.service';
 
-// declare let require: any;
-// const market_artifacts = require('../Market.json');
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -38,10 +35,7 @@ import { environment } from '../../../environment/environment';
     MatToolbarModule,
     MatCardModule,
   ],
-  providers: [
-    GreenonomyService,
-    // Web3Service
-  ],
+  providers: [GreenonomyService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -64,9 +58,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   status = '';
 
-  constructor(
-    private greenonomyService: GreenonomyService // private web3Service: Web3Service
-  ) {}
+  marketItems: IItem[];
+  myItems: IItem[];
+  constructor(private greenonomyService: GreenonomyService) {}
   async ngOnInit(): Promise<void> {
     this.subscription = combineLatest([
       this.greenonomyService.getCurrentBlock(),
@@ -78,51 +72,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       console.log('Current block: ', block);
       console.log('Item contract address: ', itemAddress);
       console.log('Greenom contract address: ', greenomAddress);
-      console.log('Market items count: ', items);
-      console.log('My items count: ', myItems);
-      // console.log('test', name);
+      console.log('Market items: ', items);
+      console.log('My items: ', myItems);
+      this.marketItems = items;
+      this.myItems = myItems;
     });
-    // this.alumniSub = this.greenonomyService.list().subscribe((data) => {
-    //   this.alumni = data;
-    // });
-    // const res = await this.greenonomyService.connectMetamask();
-    // console.log(res);
-    // await this.greenonomyService.talkwithcontract();
-    // this.greenonomyService
-    //   .artifactsToContract(market_artifacts)
-    //   .then((instance) => {
-    //     this.market = instance;
-    //     this.market.deployed().then((deployed) => {
-    //       console.log(deployed);
-    //       deployed.Transfer({}, (err, ev) => {
-    //         console.log('Transfer event came in, refreshing balance');
-    //         // this.refreshBalance();
-    //       });
-    //     });
-    //   });
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-  onDelete(id: string) {
-    if (
-      confirm('Are you sure to delete? [Better UI with Angular Dialog ...]')
-    ) {
-      // this.greenonomyService
-      //   .delete(id)
-      //   .pipe(
-      //     first(),
-      //     catchError((err) => {
-      //       console.log('ERROR:', err);
-      //       return of(true);
-      //     })
-      //   )
-      //   .subscribe((result) => {
-      //     if (result) {
-      //       const idx = this.alumni.findIndex((item) => item.id === id);
-      //       this.alumni.splice(idx, 1);
-      //     }
-      //   });
-    }
   }
 }

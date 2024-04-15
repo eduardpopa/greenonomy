@@ -96,24 +96,57 @@ export class GreenonomyService {
       })
     );
   }
-  getMarketItems(): Observable<string[]> {
+  getMarketItems(): Observable<IItem[]> {
     return from(this.marketContract.methods.listedTokens().call()).pipe(
-      map((items) => {
+      switchMap((items) => {
         const res: string[] = (items as string[]) || [];
-        // of(res);
-        return res;
+        if (res.length <= 0) {
+          return of([]);
+        }
+        return combineLatest(
+          res.map((r) => from(this.itemContract.methods.getMetadata(r).call()))
+        ).pipe(
+          map((res) => {
+            return res.map((m: any) => {
+              return {
+                uri: m['uri'],
+                value: m['value'],
+              };
+            });
+          })
+        );
       })
     );
     // return itemsObs$;
   }
-  getMyItems(): Observable<string[]> {
-    return from(this.itemContract.methods._tokens().call()).pipe(
-      map((items) => {
-        const res: string[] = (items as string[]) || [];
-        // of(res);
-        return res;
+  getMyItems(): Observable<IItem[]> {
+    return this.getMetamaskAccounts().pipe(
+      switchMap((accounts) => {
+        return from(this.itemContract.methods.getMyTokens().call()).pipe(
+          switchMap((items) => {
+            const res: string[] = (items as string[]) || [];
+            if (res.length <= 0) {
+              return of([]);
+            }
+            return combineLatest(
+              res.map((r) =>
+                from(this.itemContract.methods.getMetadata(r).call())
+              )
+            ).pipe(
+              map((res) => {
+                return res.map((m: any) => {
+                  return {
+                    uri: m['uri'],
+                    value: m['value'],
+                  };
+                });
+              })
+            );
+          })
+        );
       })
     );
+
     // return itemsObs$;
   }
 }
