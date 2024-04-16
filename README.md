@@ -1,6 +1,22 @@
-# Exercise 4: BINFO-CEP alumni
+# Greenonomy: dApp in practice
 
 The solution stack defined in `./docker-compose.yml` is composed by the following components:
+
+- ## [ganaghe] (https://docs.nethereum.com/en/latest/ethereum-and-clients/ganache-cli/)
+
+  Local Ethereum blockchain environment used to store smart contracts and transactions
+
+  1. expose port:`8545` for localhost
+
+> Shared `ganache` VOLUME used to save accounts
+
+- ## [truffle] (https://archive.trufflesuite.com/)
+
+  Development framework for Ethereum-based blockchain projects
+
+  1. compile test and deploy `/truffle/contracts`
+
+> Shared `truffle` VOLUME used to save build contracts and link them with APP `./app/src/contracts`
 
 - ## [NGINX](https://hub.docker.com/_/nginx)
 
@@ -16,14 +32,12 @@ The solution stack defined in `./docker-compose.yml` is composed by the followin
 
 - ## [APP](./app/)
 
-  Is an Single Page Application developed with [Angular@17](https://angular.io/guide/releases) and [Angular Material@17](https://material.angular.io)
+  Is an Single Page Application developed with [Angular@17](https://angular.io/guide/releases) and [Angular Material@17](https://material.angular.io)+[web3js](https://web3js.org/)
 
   > There are two options in `./docker-compose.yml` file to use the APP:
 
   - `./app/build.Dockerfile` image to build the application from sources
   - `./app/local.Dockerfile` image that contains an existing pre-build application **default** since build is taking ~2 min.
-
-  > Since there is only one feature (`./app/src/app/alumni`) in the application, the angular router is set to serve everything from **/alumni** path `{ path: '**', redirectTo: 'alumni' },`
 
 - ## [API](./api/)
 
@@ -39,6 +53,12 @@ The solution stack defined in `./docker-compose.yml` is composed by the followin
 
 ## Start the application
 
-- `$ docker compose up`
+- `$ docker compose up -d`
 - [http://localhost:8080](http://localhost:8080)
+- - contracts are not linked [yet] to app build (fix):
+    - `$ cd truffle` and run `$ truffle migrate`
+    - copy Greenom, Item, Market addresses (0xb105d96170dbb99bc2F7B75Df007Ebe9a8121cB5) from output terminal to `/app/src/enivironemnt/environemnt.ts` coresponding variables
+    - copy `/truffle/build/` Item.json, Greenom.json, Market.json to `/app/src/contracts` folder
+    - run `$ ng serve`
+    - [http://localhost:4200](http://localhost:4200)
 - `$docker system prune -a`
